@@ -11,12 +11,13 @@ pub fn read_username() -> io::Result<HashSet<String>> {
 
     if let Ok(contents) = fs::read_to_string(FILE_PATH) {
         for line in contents.lines() {
-            usernames.insert(line.to_string());
+            usernames.insert(line.trim().to_lowercase()); // Normalize username
         }
     }
 
     Ok(usernames)
 }
+
 
 // Write a new username to the file.
 pub fn write_usernames(username: &str) -> io::Result<()> {
