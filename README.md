@@ -1,6 +1,6 @@
 # **Encrypted Space and Data Partition**
 [![Rust](https://img.shields.io/badge/Language-Rust-blue)](https://www.rust-lang.org/)  
-An application which will generate encrypted ephemeral environments and tooling for confidential information sharing.
+An application which will generate encrypted and ephemeral environments and tooling for the confidential sharing of information.
 ---
 
 ## **Current Version: 0.0.1c**
