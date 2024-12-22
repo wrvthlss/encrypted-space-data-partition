@@ -14,7 +14,6 @@ pub fn read_username() -> io::Result<HashSet<String>> {
             usernames.insert(line.trim().to_lowercase()); // Normalize username
         }
     }
-
     Ok(usernames)
 }
 

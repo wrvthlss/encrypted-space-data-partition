@@ -1,7 +1,6 @@
 # **Encrypted Space and Data Partition**
 [![Rust](https://img.shields.io/badge/Language-Rust-blue)](https://www.rust-lang.org/)  
-A continuously improved learning project in **Rust** focusing on **networking**, **system design**, and **Tokio-based asynchronous programming**. The project evolves with every version, incorporating new features and refining architecture to build a scalable, secure system.
-
+An application which will generate encrypted ephemeral environments and tooling for confidential information sharing.
 ---
 
 ## **Current Version: 0.0.1c**
