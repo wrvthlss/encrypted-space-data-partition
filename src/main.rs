@@ -3,9 +3,11 @@ mod business_logic;
 mod presentation;
 
 use business_logic::registration::register_new_username;
+use business_logic::registration::login_existing_username;
 use presentation::session::Session;
 use presentation::menu::display_menu;
 use business_logic::messages::process_message;
+
 
 use tokio::net::{TcpListener, TcpStream};
 use std::sync::Arc;
@@ -33,6 +35,7 @@ async fn main() -> std::io::Result<()> {
 }
 
 
+
 async fn handle_connection(mut socket: TcpStream, addr: std::net::SocketAddr, db: Db) {
     println!("[*] Client {} connected", addr);
 
@@ -58,34 +61,21 @@ async fn handle_connection(mut socket: TcpStream, addr: std::net::SocketAddr, db
         }
     };
 
-    match selection.as_str() {
+    let username = match selection.as_str() {
         "1" => {
-            // Placeholder for existing username logic
-            if let Err(e) = socket.write_all(b"[!] Login with an existing username is not implemented yet.\n").await {
-                println!("[-] Failed to send message to {}: {}", addr, e);
-            }
-            return; // Exit after displaying the message
+            // Login with existing username
+            login_existing_username(&mut socket, &addr).await
         }
         "2" => {
             // Register a new username
-            let username = match register_new_username(&mut socket, &addr).await {
-                Some(username) => username,
-                None => {
-                    println!("[*] Client {} disconnected during registration.", addr);
-                    return;
-                }
-            };
-
-            // Create a session
-            let session = Session::new_registered(username.clone());
-            println!("[*] User '{}' logged in with session: {:?}", username, session);
+            register_new_username(&mut socket, &addr).await
         }
         "3" => {
             // Placeholder for guest logic
             if let Err(e) = socket.write_all(b"[!] Guest account logic is not implemented yet.\n").await {
                 println!("[-] Failed to send message to {}: {}", addr, e);
             }
-            return; // Exit after displaying the message
+            return;
         }
         "4" => {
             // Disconnect
@@ -100,11 +90,23 @@ async fn handle_connection(mut socket: TcpStream, addr: std::net::SocketAddr, db
             if let Err(e) = socket.write_all(b"[!] Invalid selection. Please enter 1, 2, 3, or 4.\n").await {
                 println!("[-] Failed to send invalid selection message to {}: {}", addr, e);
             }
-            return; // Exit after invalid input
+            return;
         }
-    }
+    };
 
-    // Step 3: Command handling loop
+    let username = match username {
+        Some(username) => username,
+        None => {
+            println!("[*] Client {} disconnected.", addr);
+            return;
+        }
+    };
+
+    // Step 3: Create a session
+    let session = Session::new_registered(username.clone());
+    println!("[*] User '{}' logged in with session: {:?}", username, session);
+
+    // Step 4: Command handling loop
     loop {
         match socket.read(&mut buffer).await {
             Ok(n) => {
