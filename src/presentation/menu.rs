@@ -1,7 +1,7 @@
 use tokio::net::TcpStream;
 use tokio::io::AsyncWriteExt;
 
-pub async fn display_menu(socket: &mut TcpStream) -> Result<(), std::io::Error> {
+pub async fn display_menu(writer: &mut tokio::io::WriteHalf<TcpStream>) -> Result<(), std::io::Error> {
     let menu = "\
         Please select a following option:\r\n\
         1. Enter existing username.\r\n\
@@ -10,6 +10,6 @@ pub async fn display_menu(socket: &mut TcpStream) -> Result<(), std::io::Error> 
         4. Disconnect from the server.\r\n\r\n\
         Please enter 1, 2, 3 or 4:\r\n";
 
-    socket.write_all(menu.as_bytes()).await?;
+    writer.write_all(menu.as_bytes()).await?;
     Ok(())
 }
