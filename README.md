@@ -7,7 +7,7 @@ An application which will generate encrypted and ephemeral environments and tool
 The current version includes a fully refactored codebase with modular architecture:
 - **N-tier design** for separation of concerns.
 - Functional menu system for user registration and login.
-- Database-backed username persistence.
+- Text file username persistence.
 - Basic CRUD operations (`SET`, `GET`, `SHOW`) on a key-value store.
 
 ---
